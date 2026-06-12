@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stone Paper Scissors Game</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Stone Paper Scissors</h1>
+    
+
+
+    <button onclick="
+        generateComputerChoice();
+        showResult('stone', computerChoice, getResult('stone', computerChoice));
+    ">
+        Stone
+    </button>
+
+    <button onclick="
+        generateComputerChoice();
+        showResult('paper', computerChoice, getResult('paper', computerChoice));
+    ">
+        Paper
+    </button>
+
+    <button onclick="
+        generateComputerChoice();
+        showResult('scissors', computerChoice, getResult('scissors', computerChoice));
+    ">
+        Scissors
+    </button>
+
+    <button onclick="
+    localStorage.clear();
+    score = { win: 0, lost: 0, tie: 0 };
+    localStorage.setItem('score', JSON.stringify(score));
+
+    document.querySelector('#Score').innerText =
+    `Score: Win: ${score.win} Lost: ${score.lost} Tie: ${score.tie}`;
+    ">Reset</button>
+    
+    <h3 id="User-Move"></h3>
+    <h3 id="Computer-Move"></h3>
+    <h3 id="Result"></h3>
+    <h3 id="Score"></h3>
+
+
+
+
+    <script>
+         let scoreStr = localStorage.getItem('score');
+         let score = JSON.parse(scoreStr) || {
+             win: 0,
+             lost: 0,
+             tie: 0,
+         };
+        
+
+        let computerChoice;
+
+        function generateComputerChoice() {
+            let randomNumber = Math.random() * 3;
+
+            if (randomNumber <= 1) {
+                computerChoice = 'stone';
+            }
+            else if (randomNumber <= 2) {
+                computerChoice = 'paper';
+            }
+            else {
+                computerChoice = 'scissors';
+            }
+        }
+
+        function getResult(userMove, computerMove) {
+
+            if (userMove === 'stone') {
+
+                if (computerMove === 'stone') {
+                    score.tie++;
+                    return 'It is a tie';
+                }
+                else if (computerMove === 'paper') {
+                    score.lost++;
+                    return 'Computer wins';
+                }
+                else {
+                    score.win++;
+                    return 'You win';
+                }
+
+            }
+            else if (userMove === 'paper') {
+
+                if (computerMove === 'stone') {
+                    score.win++;
+                    return 'You win';
+                }
+                else if (computerMove === 'paper') {
+                    score.tie++;
+                    return 'It is a tie';
+                }
+                else {
+                    score.lost++;
+                    return 'Computer wins';
+                }
+
+            }
+            else if (userMove === 'scissors') {
+
+                if (computerMove === 'stone') {
+                    score.lost++;
+                    return 'Computer wins';
+                }
+                else if (computerMove === 'paper') {
+                    score.win++;
+                    return 'You win';
+                }
+                else {
+                    score.tie++;
+                    return 'It is a tie';
+                }
+            }
+        }
+
+        function showResult(userMove, computerMove, result) {
+            localStorage.setItem('score', JSON.stringify(score));
+            console.log(score);
+            document.querySelector('#User-Move').innerText = `You chose: ${userMove}`;
+            
+            document.querySelector('#Computer-Move').innerText = `Computer chose: ${computerMove}`;
+            
+            document.querySelector('#Result').innerText = `Result: ${result}`;
+
+            document.querySelector('#Score').innerText = `Score: Win: ${score.win} Lost: ${score.lost} Tie: ${score.tie}`;
+        }
+
+        document.querySelector('#Score').innerText =`Score: Win: ${score.win} Lost: ${score.lost} Tie: ${score.tie}`;
+    </script>
+
+</body>
+</html>
